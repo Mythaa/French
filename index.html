@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5-Video Switcher</title>
+    <style>
+        /* General Styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Video Background */
+        #video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: auto;
+        }
+
+        /* Button Menu */
+        #menu {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: rgba(0, 123, 255, 0.8);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: rgba(0, 123, 255, 1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Video Container -->
+    <div id="video-container">
+        <video id="background-video" autoplay muted loop>
+            <source src="video1.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <!-- Button Menu -->
+    <div id="menu">
+        <button onclick="switchVideo('video1.mp4')">Play Video 1</button>
+        <button onclick="switchVideo('video2.mp4')">Play Video 2</button>
+        <button onclick="switchVideo('video3.mp4')">Play Video 3</button>
+        <button onclick="switchVideo('video4.mp4')">Play Video 4</button>
+        <button onclick="switchVideo('video5.mp4')">Play Video 5</button>
+    </div>
+
+    <script>
+        // Function to switch videos and keep them playing in a loop
+        function switchVideo(videoSrc) {
+            const videoElement = document.getElementById('background-video');
+            videoElement.pause(); // Pause the current video
+            videoElement.src = videoSrc; // Update the video source
+            videoElement.load(); // Load the new video
+            videoElement.play(); // Play the new video
+        }
+    </script>
+</body>
+</html>
