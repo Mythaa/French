@@ -72,19 +72,19 @@
 <body>
     <!-- Video Container -->
     <div id="video-container">
-        <video id="video1" class="active" muted loop>
+        <video id="video1" class="active" muted autoplay>
             <source src="video1.mp4" type="video/mp4">
         </video>
-        <video id="video2" muted loop>
+        <video id="video2" muted>
             <source src="video2.mp4" type="video/mp4">
         </video>
-        <video id="video3" muted loop>
+        <video id="video3" muted>
             <source src="video3.mp4" type="video/mp4">
         </video>
-        <video id="video4" muted loop>
+        <video id="video4" muted>
             <source src="video4.mp4" type="video/mp4">
         </video>
-        <video id="video5" muted loop>
+        <video id="video5" muted>
             <source src="video5.mp4" type="video/mp4">
         </video>
     </div>
@@ -99,25 +99,30 @@
     </div>
 
     <script>
-        // Select all video elements
+        // Get all video elements
         const videos = document.querySelectorAll('video');
-        let activeVideo = document.querySelector('.active'); // Currently active video
+        let activeVideo = document.querySelector('.active'); // Start with the first video
 
-        // Force autoplay by interacting with the user
-        document.addEventListener('click', () => {
-            activeVideo.play();
-        }, { once: true });
+        // Seamless looping logic: Reset currentTime just before the video ends
+        videos.forEach(video => {
+            video.addEventListener('timeupdate', () => {
+                if (video.currentTime >= video.duration - 0.1) {
+                    video.currentTime = 0; // Reset to the start instantly
+                    video.play();
+                }
+            });
+        });
 
         // Function to switch videos seamlessly
         function switchVideo(videoId) {
-            // Stop and hide the currently active video
+            // Pause and hide the currently active video
             activeVideo.pause();
             activeVideo.classList.remove('active');
 
-            // Get the new active video by ID
+            // Activate the selected video
             const newVideo = document.getElementById(videoId);
             newVideo.classList.add('active');
-            newVideo.currentTime = 0; // Reset to the beginning
+            newVideo.currentTime = 0; // Ensure it starts from the beginning
             newVideo.play(); // Play the new video
             activeVideo = newVideo; // Update the active video reference
         }
