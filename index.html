@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfect Seamless Video Playback</title>
+    <title>Seamless Video Playback</title>
     <style>
         /* General Styles */
         body, html {
@@ -36,7 +36,7 @@
         }
 
         video.active {
-            display: block; /* Show the active video */
+            display: block; /* Show only the active video */
         }
 
         /* Button Menu */
@@ -72,61 +72,55 @@
 <body>
     <!-- Video Container -->
     <div id="video-container">
-        <video id="video1" class="active" muted></video>
-        <video id="video2" muted></video>
+        <video id="video1" class="active" muted loop>
+            <source src="video1.mp4" type="video/mp4">
+        </video>
+        <video id="video2" muted loop>
+            <source src="video2.mp4" type="video/mp4">
+        </video>
+        <video id="video3" muted loop>
+            <source src="video3.mp4" type="video/mp4">
+        </video>
+        <video id="video4" muted loop>
+            <source src="video4.mp4" type="video/mp4">
+        </video>
+        <video id="video5" muted loop>
+            <source src="video5.mp4" type="video/mp4">
+        </video>
     </div>
 
     <!-- Button Menu -->
     <div id="menu">
-        <button onclick="switchVideo('video1.mp4')">1</button>
-        <button onclick="switchVideo('video2.mp4')">2</button>
-        <button onclick="switchVideo('video3.mp4')">3</button>
-        <button onclick="switchVideo('video4.mp4')">4</button>
-        <button onclick="switchVideo('video5.mp4')">5</button>
+        <button onclick="switchVideo('video1')">1</button>
+        <button onclick="switchVideo('video2')">2</button>
+        <button onclick="switchVideo('video3')">3</button>
+        <button onclick="switchVideo('video4')">4</button>
+        <button onclick="switchVideo('video5')">5</button>
     </div>
 
     <script>
-        // References to video elements
-        const video1 = document.getElementById('video1');
-        const video2 = document.getElementById('video2');
+        // Select all video elements
+        const videos = document.querySelectorAll('video');
+        let activeVideo = document.querySelector('.active'); // Currently active video
 
-        let activeVideo = video1; // Start with video1 as active
-        let inactiveVideo = video2;
-
-        // Function to initialize autoplay and preload
-        function initializeVideos() {
-            activeVideo.src = 'video1.mp4'; // Set default video
-            activeVideo.play(); // Start playing the active video
-        }
+        // Force autoplay by interacting with the user
+        document.addEventListener('click', () => {
+            activeVideo.play();
+        }, { once: true });
 
         // Function to switch videos seamlessly
-        function switchVideo(src) {
-            // Set the source of the inactive video
-            inactiveVideo.src = src;
+        function switchVideo(videoId) {
+            // Stop and hide the currently active video
+            activeVideo.pause();
+            activeVideo.classList.remove('active');
 
-            // Preload the video
-            inactiveVideo.load();
-
-            // Play the inactive video slightly before the active one ends
-            activeVideo.addEventListener('timeupdate', () => {
-                if (activeVideo.currentTime >= activeVideo.duration - 0.1) {
-                    // Swap active and inactive videos
-                    activeVideo.classList.remove('active');
-                    inactiveVideo.classList.add('active');
-                    inactiveVideo.play();
-
-                    // Reset the active video for seamless looping
-                    activeVideo.pause();
-                    activeVideo.currentTime = 0;
-
-                    // Swap references
-                    [activeVideo, inactiveVideo] = [inactiveVideo, activeVideo];
-                }
-            });
+            // Get the new active video by ID
+            const newVideo = document.getElementById(videoId);
+            newVideo.classList.add('active');
+            newVideo.currentTime = 0; // Reset to the beginning
+            newVideo.play(); // Play the new video
+            activeVideo = newVideo; // Update the active video reference
         }
-
-        // Initialize videos on page load
-        window.onload = initializeVideos;
     </script>
 </body>
 </html>
