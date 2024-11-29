@@ -13,7 +13,7 @@
             font-family: Arial, sans-serif;
         }
 
-        /* Video Background */
+        /* Video Container */
         #video-container {
             position: fixed;
             top: 0;
@@ -31,6 +31,11 @@
             transform: translate(-50%, -50%);
             width: 100%;
             height: auto;
+            display: none; /* Hide videos by default */
+        }
+
+        video.active {
+            display: block; /* Only show the active video */
         }
 
         /* Button Menu */
@@ -66,38 +71,46 @@
 <body>
     <!-- Video Container -->
     <div id="video-container">
-        <video id="background-video" autoplay muted>
+        <video id="video1" class="active" autoplay muted loop>
             <source src="video1.mp4" type="video/mp4">
-            Your browser does not support the video tag.
+        </video>
+        <video id="video2" autoplay muted loop>
+            <source src="video2.mp4" type="video/mp4">
+        </video>
+        <video id="video3" autoplay muted loop>
+            <source src="video3.mp4" type="video/mp4">
+        </video>
+        <video id="video4" autoplay muted loop>
+            <source src="video4.mp4" type="video/mp4">
+        </video>
+        <video id="video5" autoplay muted loop>
+            <source src="video5.mp4" type="video/mp4">
         </video>
     </div>
 
     <!-- Button Menu -->
     <div id="menu">
-        <button onclick="switchVideo('video1.mp4')">1</button>
-        <button onclick="switchVideo('video2.mp4')">2</button>
-        <button onclick="switchVideo('video3.mp4')">3</button>
-        <button onclick="switchVideo('video4.mp4')">4</button>
-        <button onclick="switchVideo('video5.mp4')">5</button>
+        <button onclick="switchVideo('video1')">1</button>
+        <button onclick="switchVideo('video2')">2</button>
+        <button onclick="switchVideo('video3')">3</button>
+        <button onclick="switchVideo('video4')">4</button>
+        <button onclick="switchVideo('video5')">5</button>
     </div>
 
     <script>
-        // Select the video element
-        const videoElement = document.getElementById('background-video');
+        // Function to switch videos seamlessly
+        function switchVideo(videoId) {
+            // Get all video elements
+            const videos = document.querySelectorAll('video');
 
-        // Ensure seamless looping by resetting currentTime on 'ended' event
-        videoElement.addEventListener('ended', () => {
-            videoElement.currentTime = 0;
-            videoElement.play();
-        });
+            // Loop through and hide all videos
+            videos.forEach(video => {
+                video.classList.remove('active');
+            });
 
-        // Function to switch videos
-        function switchVideo(videoSrc) {
-            videoElement.pause(); // Pause the current video
-            videoElement.src = videoSrc; // Update the video source
-            videoElement.load(); // Reload the new video
-            videoElement.currentTime = 0; // Ensure it starts from the beginning
-            videoElement.play(); // Play the new video
+            // Show the selected video
+            const selectedVideo = document.getElementById(videoId);
+            selectedVideo.classList.add('active');
         }
     </script>
 </body>
