@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seamless Video Switcher</title>
+    <title>Perfect Seamless Video Loops</title>
     <style>
         /* General Styles */
         body, html {
@@ -71,19 +71,19 @@
 <body>
     <!-- Video Container -->
     <div id="video-container">
-        <video id="video1" class="active" autoplay muted loop>
+        <video id="video1" class="active" autoplay muted>
             <source src="video1.mp4" type="video/mp4">
         </video>
-        <video id="video2" autoplay muted loop>
+        <video id="video2" autoplay muted>
             <source src="video2.mp4" type="video/mp4">
         </video>
-        <video id="video3" autoplay muted loop>
+        <video id="video3" autoplay muted>
             <source src="video3.mp4" type="video/mp4">
         </video>
-        <video id="video4" autoplay muted loop>
+        <video id="video4" autoplay muted>
             <source src="video4.mp4" type="video/mp4">
         </video>
-        <video id="video5" autoplay muted loop>
+        <video id="video5" autoplay muted>
             <source src="video5.mp4" type="video/mp4">
         </video>
     </div>
@@ -98,19 +98,32 @@
     </div>
 
     <script>
-        // Function to switch videos seamlessly
-        function switchVideo(videoId) {
-            // Get all video elements
-            const videos = document.querySelectorAll('video');
-
-            // Loop through and hide all videos
-            videos.forEach(video => {
-                video.classList.remove('active');
+        // Function to enable perfect looping
+        function ensurePerfectLoop(video) {
+            // Detect when the video is about to end and reset `currentTime`
+            video.addEventListener('timeupdate', () => {
+                if (video.currentTime > video.duration - 0.1) {
+                    video.currentTime = 0;
+                    video.play();
+                }
             });
+        }
+
+        // Get all video elements
+        const videos = document.querySelectorAll('video');
+
+        // Apply the seamless loop logic to all videos
+        videos.forEach(video => ensurePerfectLoop(video));
+
+        // Function to switch videos
+        function switchVideo(videoId) {
+            // Hide all videos
+            videos.forEach(video => video.classList.remove('active'));
 
             // Show the selected video
             const selectedVideo = document.getElementById(videoId);
             selectedVideo.classList.add('active');
+            selectedVideo.play(); // Start playing immediately
         }
     </script>
 </body>
