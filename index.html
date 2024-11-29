@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>5-Video Switcher</title>
+    <title>Seamless Video Switcher</title>
     <style>
         /* General Styles */
         body, html {
@@ -66,7 +66,7 @@
 <body>
     <!-- Video Container -->
     <div id="video-container">
-        <video id="background-video" autoplay muted loop>
+        <video id="background-video" autoplay muted>
             <source src="video1.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
@@ -74,20 +74,29 @@
 
     <!-- Button Menu -->
     <div id="menu">
-        <button onclick="switchVideo('video1.mp4')">Play Video 1</button>
-        <button onclick="switchVideo('video2.mp4')">Play Video 2</button>
-        <button onclick="switchVideo('video3.mp4')">Play Video 3</button>
-        <button onclick="switchVideo('video4.mp4')">Play Video 4</button>
-        <button onclick="switchVideo('video5.mp4')">Play Video 5</button>
+        <button onclick="switchVideo('video1.mp4')">1</button>
+        <button onclick="switchVideo('video2.mp4')">2</button>
+        <button onclick="switchVideo('video3.mp4')">3</button>
+        <button onclick="switchVideo('video4.mp4')">4</button>
+        <button onclick="switchVideo('video5.mp4')">5</button>
     </div>
 
     <script>
-        // Function to switch videos and keep them playing in a loop
+        // Select the video element
+        const videoElement = document.getElementById('background-video');
+
+        // Ensure seamless looping by resetting currentTime on 'ended' event
+        videoElement.addEventListener('ended', () => {
+            videoElement.currentTime = 0;
+            videoElement.play();
+        });
+
+        // Function to switch videos
         function switchVideo(videoSrc) {
-            const videoElement = document.getElementById('background-video');
             videoElement.pause(); // Pause the current video
             videoElement.src = videoSrc; // Update the video source
-            videoElement.load(); // Load the new video
+            videoElement.load(); // Reload the new video
+            videoElement.currentTime = 0; // Ensure it starts from the beginning
             videoElement.play(); // Play the new video
         }
     </script>
