@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seamless Video with Image Transition</title>
+    <title>5-Video Switcher</title>
     <style>
         /* General Styles */
         body, html {
@@ -11,10 +11,9 @@
             padding: 0;
             overflow: hidden;
             font-family: Arial, sans-serif;
-            background-color: black;
         }
 
-        /* Video Container */
+        /* Video Background */
         #video-container {
             position: fixed;
             top: 0;
@@ -25,17 +24,13 @@
             z-index: -1;
         }
 
-        video, img {
+        video {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 100%;
             height: auto;
-        }
-
-        img {
-            display: none; /* Hide image by default */
         }
 
         /* Button Menu */
@@ -69,60 +64,40 @@
     </style>
 </head>
 <body>
-    <!-- Video and Image Container -->
+    <!-- Video Container -->
     <div id="video-container">
-        <video id="background-video" autoplay muted>
+        <video id="background-video" autoplay muted loop>
             <source src="video1.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-        <img id="placeholder-image" src="image1.png" alt="Placeholder">
     </div>
 
     <!-- Button Menu -->
     <div id="menu">
-        <button onclick="switchVideo('video1.mp4', 'image1.png')">Play Video 1</button>
-        <button onclick="switchVideo('video2.mp4', 'image2.png')">Play Video 2</button>
-        <button onclick="switchVideo('video3.mp4', 'image3.png')">Play Video 3</button>
-        <button onclick="switchVideo('video4.mp4', 'image4.png')">Play Video 4</button>
-        <button onclick="switchVideo('video5.mp4', 'image5.png')">Play Video 5</button>
+        <button onclick="switchVideo('video1.mp4')">Play Video 1</button>
+        <button onclick="switchVideo('video2.mp4')">Play Video 2</button>
+        <button onclick="switchVideo('video3.mp4')">Play Video 3</button>
+        <button onclick="switchVideo('video4.mp4')">Play Video 4</button>
+        <button onclick="switchVideo('video5.mp4')">Play Video 5</button>
     </div>
 
     <script>
-        // Get references to the video and image elements
+        // Reference the video element
         const videoElement = document.getElementById('background-video');
-        const placeholderImage = document.getElementById('placeholder-image');
 
-        // Seamless looping: Show image and restart video
-        videoElement.addEventListener('ended', () => {
-            placeholderImage.style.display = 'block'; // Show placeholder image
-            videoElement.style.display = 'none'; // Hide video element
-
-            // Restart video after a short delay
-            setTimeout(() => {
-                videoElement.currentTime = 0;
-                videoElement.style.display = 'block'; // Show video element
-                placeholderImage.style.display = 'none'; // Hide placeholder image
-                videoElement.play(); // Start playing again
-            }, 1000); // Delay before restarting (1 second)
-        });
-
-        // Function to switch videos and handle image transitions
-        function switchVideo(videoSrc, imageSrc) {
+        // Function to switch videos
+        function switchVideo(videoSrc) {
             videoElement.pause(); // Pause the current video
-            placeholderImage.src = imageSrc; // Update the placeholder image source
-            placeholderImage.style.display = 'block'; // Show placeholder image
-            videoElement.style.display = 'none'; // Hide video element
-
-            // Switch video source
-            setTimeout(() => {
-                videoElement.src = videoSrc;
-                videoElement.load(); // Load the new video
-                videoElement.currentTime = 0; // Start from the beginning
-                videoElement.style.display = 'block'; // Show video element
-                placeholderImage.style.display = 'none'; // Hide placeholder image
-                videoElement.play(); // Play the new video
-            }, 1000); // Delay before switching (1 second)
+            videoElement.src = videoSrc; // Change the video source
+            videoElement.load(); // Load the new video
+            videoElement.play(); // Play the new video
         }
+
+        // Ensure the video loops seamlessly
+        videoElement.addEventListener('ended', () => {
+            videoElement.currentTime = 0; // Reset video to the beginning
+            videoElement.play(); // Play it again immediately
+        });
     </script>
 </body>
 </html>
