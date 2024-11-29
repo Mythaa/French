@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfect Seamless Video Loops</title>
+    <title>Perfect Seamless Video Playback</title>
     <style>
         /* General Styles */
         body, html {
@@ -11,6 +11,7 @@
             padding: 0;
             overflow: hidden;
             font-family: Arial, sans-serif;
+            background-color: black;
         }
 
         /* Video Container */
@@ -31,11 +32,11 @@
             transform: translate(-50%, -50%);
             width: 100%;
             height: auto;
-            display: none; /* Hide videos by default */
+            display: none; /* Hide all videos initially */
         }
 
         video.active {
-            display: block; /* Only show the active video */
+            display: block; /* Show only the active video */
         }
 
         /* Button Menu */
@@ -71,60 +72,55 @@
 <body>
     <!-- Video Container -->
     <div id="video-container">
-        <video id="video1" class="active" autoplay muted>
-            <source src="video1.mp4" type="video/mp4">
-        </video>
-        <video id="video2" autoplay muted>
-            <source src="video2.mp4" type="video/mp4">
-        </video>
-        <video id="video3" autoplay muted>
-            <source src="video3.mp4" type="video/mp4">
-        </video>
-        <video id="video4" autoplay muted>
-            <source src="video4.mp4" type="video/mp4">
-        </video>
-        <video id="video5" autoplay muted>
-            <source src="video5.mp4" type="video/mp4">
-        </video>
+        <video id="video1" class="active" muted></video>
+        <video id="video2" muted></video>
     </div>
 
     <!-- Button Menu -->
     <div id="menu">
-        <button onclick="switchVideo('video1')">1</button>
-        <button onclick="switchVideo('video2')">2</button>
-        <button onclick="switchVideo('video3')">3</button>
-        <button onclick="switchVideo('video4')">4</button>
-        <button onclick="switchVideo('video5')">5</button>
+        <button onclick="switchVideo('video1.mp4')">1</button>
+        <button onclick="switchVideo('video2.mp4')">2</button>
+        <button onclick="switchVideo('video3.mp4')">3</button>
+        <button onclick="switchVideo('video4.mp4')">4</button>
+        <button onclick="switchVideo('video5.mp4')">5</button>
     </div>
 
     <script>
-        // Function to enable perfect looping
-        function ensurePerfectLoop(video) {
-            // Detect when the video is about to end and reset `currentTime`
-            video.addEventListener('timeupdate', () => {
-                if (video.currentTime > video.duration - 0.1) {
-                    video.currentTime = 0;
-                    video.play();
+        // Reference video elements
+        const video1 = document.getElementById('video1');
+        const video2 = document.getElementById('video2');
+
+        let activeVideo = video1; // Start with video1 as active
+        let inactiveVideo = video2;
+
+        // Function to switch videos seamlessly
+        function switchVideo(src) {
+            // Set the source of the inactive video
+            inactiveVideo.src = src;
+
+            // Preload the video
+            inactiveVideo.load();
+
+            // Play the inactive video slightly before the active one ends
+            activeVideo.addEventListener('timeupdate', () => {
+                if (activeVideo.currentTime >= activeVideo.duration - 0.1) {
+                    // Swap active and inactive videos
+                    activeVideo.classList.remove('active');
+                    inactiveVideo.classList.add('active');
+                    inactiveVideo.play();
+
+                    // Reset the active video for seamless looping
+                    activeVideo.pause();
+                    activeVideo.currentTime = 0;
+
+                    // Swap references
+                    [activeVideo, inactiveVideo] = [inactiveVideo, activeVideo];
                 }
             });
         }
 
-        // Get all video elements
-        const videos = document.querySelectorAll('video');
-
-        // Apply the seamless loop logic to all videos
-        videos.forEach(video => ensurePerfectLoop(video));
-
-        // Function to switch videos
-        function switchVideo(videoId) {
-            // Hide all videos
-            videos.forEach(video => video.classList.remove('active'));
-
-            // Show the selected video
-            const selectedVideo = document.getElementById(videoId);
-            selectedVideo.classList.add('active');
-            selectedVideo.play(); // Start playing immediately
-        }
+        // Initialize the first video
+        switchVideo('video1.mp4');
     </script>
 </body>
 </html>
